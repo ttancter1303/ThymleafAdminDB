@@ -40,19 +40,6 @@ public class AccountController {
         model.addAttribute("page",page);
         return "admin-index";
     }
-//    @GetMapping("/category")
-//    public String adminCategory(Model model){
-//        String page = "admin-category";
-//        model.addAttribute("page",page);
-//        return "admin-index";
-//    }
-//
-//    @GetMapping("/product")
-//    public String adminProduct(Model model){
-//        String page = "admin-product";
-//        model.addAttribute("page",page);
-//        return "admin-index";
-//    }
 
     @GetMapping("/account")
     public String getAll(Model model) {
@@ -65,7 +52,7 @@ public class AccountController {
     }
     @GetMapping("/category")
     public String getAllCategory(Model model) {
-        String page = "category-list";
+        String page = "admin-category";
         List<Category> categories = categoryRepository.findAll();
         model.addAttribute("categorys", categories);
         model.addAttribute("page",page);
@@ -73,7 +60,7 @@ public class AccountController {
         return "admin-index";
     }    @GetMapping("/product")
     public String getAllProduct(Model model) {
-        String page = "product-list";
+        String page = "admin-product";
         List<Product> products = productRepository.findAll();
         model.addAttribute("products", products);
         model.addAttribute("page",page);
