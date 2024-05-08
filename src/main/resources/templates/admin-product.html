@@ -1,0 +1,22 @@
+<div th:fragment="AdminProduct">
+    <h4>Admin Product</h4>
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <td>Id</td>
+            <td>Name</td>
+            <td>Price</td>
+        </tr>
+        </thead>
+
+        <tbody>
+        <tr th:each="obj : ${products}">
+            <td th:text="${obj.id}">Id</td>
+            <td th:text="${obj.name}">Name</td>
+            <td th:text="${obj.price}">Price</td>
+            <td>Edit</td>
+            <td><a th:href="${'/admin/delete/product' + obj.id}">Delete</a></td>
+        </tr>
+        </tbody>
+    </table>
+</div>

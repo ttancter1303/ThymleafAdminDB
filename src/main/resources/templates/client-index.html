@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Trang Chủ</title>
+
+    <link th:rel="stylesheet" th:href="@{/webjars/bootstrap/4.0.0-2/css/bootstrap.min.css} "/>
+    <link th:rel="stylesheet" th:href="@{/webjars/font-awesome/5.15.4/css/all.css} "/>
+    <script th:src="@{/webjars/jquery/3.0.0/jquery.min.js}"></script>
+
+</head>
+<body>
+    <nav class="navbar navbar-expand-sm">
+        <!-- Brand -->
+        <a class="navbar-brand" href="#">Logo</a>
+
+        <!-- Links -->
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link" href="/">Trang Chủ</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/product">Sản Phẩm</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/contact">Client Contact</a>
+            </li>
+        </ul>
+    </nav>
+
+
+    <div th:if="${page=='client-index'}">
+        <h4>Trang Chủ</h4>
+    </div>
+
+    <div th:if="${page=='product-list-client'}">
+        <div th:replace="product-list-client.html::ProductListClient"></div>
+    </div>
+
+    <div th:if="${page=='client-contact'}">
+        <div th:replace="client-contact.html::ClientContact"></div>
+    </div>
+
+</body>
+</html>

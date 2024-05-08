@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <link th:rel="stylesheet" th:href="@{/webjars/bootstrap/4.0.0-2/css/bootstrap.min.css} "/>
+    <link th:rel="stylesheet" th:href="@{/webjars/font-awesome/5.15.4/css/all.css} "/>
+    <script th:src="@{/webjars/jquery/3.0.0/jquery.min.js}"></script>
+
+</head>
+<body>
+    <nav class="navbar navbar-expand-sm">
+        <!-- Brand -->
+        <a class="navbar-brand" href="#">Logo</a>
+
+        <!-- Links -->
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link" href="/admin/">Trang Chủ</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/admin/account">account</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/admin/category">Danh Sách Sản Phẩm</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/admin/product">Sản Phẩm</a>
+            </li>
+        </ul>
+    </nav>
+    <div th:if="${page=='admin-index'}">
+        <h4>Trang Chủ</h4>
+    </div>
+
+    <div th:if="${page=='account-list'}">
+        <div th:replace="account-list.html::AccountList"></div>
+    </div>
+    <div th:if="${page=='admin-category'}">
+        <div th:replace="admin-category.html::AdminCategory"></div>
+    </div>
+    <div th:if="${page=='admin-product'}">
+        <div th:replace="admin-product.html::AdminProduct"></div>
+    </div>
+</body>
+</html>
