@@ -40,19 +40,19 @@ public class AccountController {
         model.addAttribute("page",page);
         return "admin-index";
     }
-    @GetMapping("/category")
-    public String adminCategory(Model model){
-        String page = "admin-category";
-        model.addAttribute("page",page);
-        return "admin-index";
-    }
-
-    @GetMapping("/product")
-    public String adminProduct(Model model){
-        String page = "admin-product";
-        model.addAttribute("page",page);
-        return "admin-index";
-    }
+//    @GetMapping("/category")
+//    public String adminCategory(Model model){
+//        String page = "admin-category";
+//        model.addAttribute("page",page);
+//        return "admin-index";
+//    }
+//
+//    @GetMapping("/product")
+//    public String adminProduct(Model model){
+//        String page = "admin-product";
+//        model.addAttribute("page",page);
+//        return "admin-index";
+//    }
 
     @GetMapping("/account")
     public String getAll(Model model) {
