@@ -37,11 +37,18 @@
     <div th:if="${page=='account-list'}">
         <div th:replace="account-list.html::AccountList"></div>
     </div>
+
     <div th:if="${page=='admin-category'}">
         <div th:replace="admin-category.html::AdminCategory"></div>
     </div>
+
     <div th:if="${page=='admin-product'}">
         <div th:replace="admin-product.html::AdminProduct"></div>
     </div>
+
+    <div th:if="${page=='admin-product-add'}">
+        <div th:replace="admin-product-add::AdminProductAdd"></div>
+    </div>
+
 </body>
 </html>
