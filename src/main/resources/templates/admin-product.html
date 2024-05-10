@@ -1,7 +1,7 @@
 <div th:fragment="AdminProduct">
     <h4>Admin Product</h4>
     <a href="/admin/product-add" class="btn btn-primary btn-sm"> Add</a>
-    <a href="/admin/product-edit" class="btn btn-primary btn-sm"> edit</a>
+<!--    <a href="/admin/product-edit" class="btn btn-primary btn-sm"> edit</a>-->
     <table class="table table-bordered">
         <thead>
         <tr>
@@ -24,7 +24,7 @@
             <td th:text="${obj.price}">Price</td>
             <td th:text="${obj.categoryName}">Category Name</td>
             <td><a th:href="${'/admin/delete/product/' + obj.id}">Delete</a></td>
-            <td><a th:href="${'/admin/edit/product/' + obj.id}">Edit</a></td>
+            <td><a th:href="${'/admin/product-edit/' + obj.id}">Edit</a></td>
         </tr>
         </tbody>
     </table>

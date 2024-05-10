@@ -88,6 +88,8 @@ public class AccountController {
         return "admin-index";
     }
 
+
+
     @GetMapping("delete/{id}")
     public String delete(@PathVariable Integer id) {
         Optional<Account> opAccount = accountRepo.findById(id);
@@ -113,8 +115,6 @@ public class AccountController {
         product.setName(productName);
         product.setImagePath(fileName);
         productRepository.save(product);
-
-
         System.out.println(image);
         return "redirect:/admin/product";
     }
@@ -128,6 +128,47 @@ public class AccountController {
         productRepository.deleteById(id);
         return "redirect:/admin/product";
     }
+
+    @GetMapping("/product-edit/{id}")
+    public String editProduct(@PathVariable Integer id,Model model) {
+        Optional<Product> optionalProduct = productRepository.findById(id);
+
+        if (optionalProduct.isEmpty()) {
+            System.out.println("Not found product with id = " + id);
+        }
+
+        Product product = optionalProduct.get();
+        List<Category> categories = categoryRepository.findAll();
+
+        model.addAttribute("page","admin-product-edit");
+        model.addAttribute("product",product);
+        model.addAttribute("categories",categories);
+
+        return "admin-index";
+    }
+    @PostMapping("/product-update")
+    public String updateProduct(@ModelAttribute Product updatedProduct) {
+        // Lưu thông tin sản phẩm đã được cập nhật vào cơ sở dữ liệu
+        Product existingProduct = productRepository.findById(updatedProduct.getId()).orElse(null);
+
+        if (existingProduct == null) {
+            // Xử lý trường hợp sản phẩm không tồn tại
+            System.out.println("Product not found with ID: " + updatedProduct.getId());
+            // Chuyển hướng hoặc trả về trang lỗi
+            return "error"; // Thay "error" bằng tên của trang lỗi hoặc trang thông báo lỗi của bạn
+        }
+
+        // Cập nhật thông tin sản phẩm
+        existingProduct.setName(updatedProduct.getName());
+        existingProduct.setPrice(updatedProduct.getPrice());
+        existingProduct.setCategory(updatedProduct.getCategory());
+        // Lưu vào cơ sở dữ liệu
+        productRepository.save(existingProduct);
+
+        // Chuyển hướng sau khi cập nhật thành công
+        return "redirect:/admin/product-edit/" + existingProduct.getId(); // Chuyển hướng đến trang chỉnh sửa sản phẩm sau khi cập nhật
+    }
+
     @GetMapping("delete/category/{id}")
     public String deleteCategory(@PathVariable Integer id) {
         Optional<Category> categoryOptional = categoryRepository.findById(id);

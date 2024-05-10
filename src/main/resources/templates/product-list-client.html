@@ -1,3 +1,24 @@
 <div th:fragment="ProductListClient">
     <h4>List Product</h4>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="row">
+                    <!-- Vòng lặp để hiển thị mỗi sản phẩm trong một cột -->
+                    <div class="col-lg-3 col-md-4 col-sm-6 mb-4" th:each="obj : ${products}">
+                        <div class="card">
+                            <img class="card-img-top" src="https://www.w3schools.com/bootstrap4/img_avatar1.png" alt="Card image" style="width:100%">
+                            <div class="card-body">
+                                <h5 class="card-title" th:text="${obj.name}">Name</h5>
+                                <p class="card-text" th:text="${obj.price}">Price</p>
+                                <p class="card-text" th:text="${obj.categoryName}">Category name</p>
+                                <a href="#" class="btn btn-primary">See Profile</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
