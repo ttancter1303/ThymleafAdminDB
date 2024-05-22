@@ -8,14 +8,19 @@ import com.example.demo61_account_thymeleaf.repository.AccountRepository;
 import com.example.demo61_account_thymeleaf.repository.CategoryRepository;
 import com.example.demo61_account_thymeleaf.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import com.example.demo61_account_thymeleaf.service.AccountService;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -44,7 +49,6 @@ public class AccountController {
         return "admin-index";
     }
 
-
     @GetMapping("/account")
     public String getAll(Model model) {
         String page = "account-list";
@@ -63,9 +67,11 @@ public class AccountController {
 
         return "admin-index";
     }    @GetMapping("/product")
-    public String getAllProduct(Model model) {
+    public String getAllProduct(Model model, Pageable pageable) {
         String page = "admin-product";
-        List<Product> products = productRepository.findAll();
+        Page<Product> productPage = productRepository.findAll(pageable);
+//        page product = list product + số trang + số bản ghi 1 trang
+        List<Product> products = productPage.toList();
 
         List<ProductDTO> productDTOS = new ArrayList<>();
         for (Product obj : products) {
@@ -83,7 +89,10 @@ public class AccountController {
         }
 
         model.addAttribute("products", productDTOS);
+        model.addAttribute("totalPage",productPage.getTotalPages());
+        model.addAttribute("currentPage",pageable.getPageNumber());
         model.addAttribute("page",page);
+        System.out.println(pageable.getPageNumber());
 
         return "admin-index";
     }
@@ -115,6 +124,13 @@ public class AccountController {
         product.setName(productName);
         product.setImagePath(fileName);
         productRepository.save(product);
+        String uploadDir = "D:\\DEV\\Demo61_Account_Thymeleaf\\src\\main\\resources\\static\\image";
+        try {
+            Path uploadPath = Paths.get(uploadDir);
+            Files.copy(image.getInputStream(), uploadPath.resolve(fileName), StandardCopyOption.REPLACE_EXISTING);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         System.out.println(image);
         return "redirect:/admin/product";
     }
@@ -146,27 +162,26 @@ public class AccountController {
 
         return "admin-index";
     }
-    @PostMapping("/product-update")
-    public String updateProduct(@ModelAttribute Product updatedProduct) {
-        // Lưu thông tin sản phẩm đã được cập nhật vào cơ sở dữ liệu
-        Product existingProduct = productRepository.findById(updatedProduct.getId()).orElse(null);
+    @PostMapping("/product-update/{id}")
+    public String updateProduct(@PathVariable Integer id,
+                                @RequestParam String product_name,
+                                @RequestParam MultipartFile image,
+                                @RequestParam Integer price,
+                                @RequestParam Integer category_id) {
+        String imageName = image.getOriginalFilename();
 
-        if (existingProduct == null) {
-            // Xử lý trường hợp sản phẩm không tồn tại
-            System.out.println("Product not found with ID: " + updatedProduct.getId());
-            // Chuyển hướng hoặc trả về trang lỗi
-            return "error"; // Thay "error" bằng tên của trang lỗi hoặc trang thông báo lỗi của bạn
-        }
+        Optional<Product> opProduct = productRepository.findById(id);
 
-        // Cập nhật thông tin sản phẩm
-        existingProduct.setName(updatedProduct.getName());
-        existingProduct.setPrice(updatedProduct.getPrice());
-        existingProduct.setCategory(updatedProduct.getCategory());
-        // Lưu vào cơ sở dữ liệu
-        productRepository.save(existingProduct);
+        Product theProduct = opProduct.get();
+        theProduct.setName(product_name);
+        theProduct.setPrice(price);
+        theProduct.setImagePath(imageName);
 
-        // Chuyển hướng sau khi cập nhật thành công
-        return "redirect:/admin/product-edit/" + existingProduct.getId(); // Chuyển hướng đến trang chỉnh sửa sản phẩm sau khi cập nhật
+        Category category = categoryRepository.findById(category_id).orElse(null);
+        theProduct.setCategory(category);
+
+        productRepository.save(theProduct);
+        return "redirect:/admin/product";
     }
 
     @GetMapping("delete/category/{id}")
@@ -178,4 +193,5 @@ public class AccountController {
         categoryRepository.deleteById(id);
         return "redirect:/admin/category";
     }
+
 }

@@ -22,5 +22,6 @@ public class Account {
     private Date createdAt;
 
     private Date updatedAt;
+    private String role;
 
 }

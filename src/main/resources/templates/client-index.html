@@ -23,7 +23,13 @@
                 <a class="nav-link" href="/product">Sản Phẩm</a>
             </li>
             <li class="nav-item">
+                <a class="nav-link" href="/blog">Blog</a>
+            </li>
+            <li class="nav-item">
                 <a class="nav-link" href="/contact">Client Contact</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/login">Login</a>
             </li>
         </ul>
     </nav>
@@ -31,14 +37,20 @@
 
     <div th:if="${page=='client-index'}">
         <h4>Trang Chủ</h4>
+
     </div>
 
     <div th:if="${page=='product-list-client'}">
         <div th:replace="product-list-client.html::ProductListClient"></div>
     </div>
-
+    <div th:if="${page=='blog-list-client'}">
+        <div th:replace="blog-list-client.html::BlogListClient"></div>
+    </div>
     <div th:if="${page=='client-contact'}">
         <div th:replace="client-contact.html::ClientContact"></div>
+    </div>
+    <div th:if="${page=='blog-add'}">
+        <div th:replace="blog-add::BlogAdd"></div>
     </div>
 
 </body>

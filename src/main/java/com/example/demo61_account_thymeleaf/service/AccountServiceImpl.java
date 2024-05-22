@@ -2,11 +2,14 @@ package com.example.demo61_account_thymeleaf.service;
 
 import com.example.demo61_account_thymeleaf.entity.Account;
 import com.example.demo61_account_thymeleaf.repository.AccountRepository;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -34,7 +37,9 @@ public class AccountServiceImpl implements AccountService {
         if (account == null) {
             throw new UsernameNotFoundException("Account not found");
         }
-
-        return new User(username, account.getPassword(), Collections.emptyList());
+        List<GrantedAuthority> listRole = new ArrayList<>();
+        listRole.add(new SimpleGrantedAuthority(account.getRole()));
+        // phân quyền: role = ADMIN hoặc role = USER
+        return new User(username, account.getPassword(), listRole);
     }
 }

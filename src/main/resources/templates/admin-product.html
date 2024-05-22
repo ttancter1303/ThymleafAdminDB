@@ -27,5 +27,12 @@
             <td><a th:href="${'/admin/product-edit/' + obj.id}">Edit</a></td>
         </tr>
         </tbody>
+        <ul class="pagination justify-content-end">
+            <li class="page-item"><a class="page-link" th:href="${'/admin/product?page=' + (currentPage - 1)}" th:if="${currentPage > 0}">Previous</a></li>
+
+            <li class="page-item" th:each="i : ${#numbers.sequence(1, totalPage)}"><a class="page-link" th:href="${'/admin/product?page='+(i-1)}" th:text="${i}">1</a></li>
+
+            <li class="page-item"><a class="page-link" th:href="${'/admin/product?page='+(currentPage+1)}" th:if="${currenPage < totalPage -1}">Next</a></li>
+        </ul>
     </table>
 </div>
