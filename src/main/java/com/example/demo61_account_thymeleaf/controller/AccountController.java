@@ -22,15 +22,16 @@ public class AccountController {
     AccountRepository accountRepository;
     @Autowired
     DepartmentRepository departmentRepository;
+
     @GetMapping
     public String clientIndex(Model model) {
         String page = "account-index";
         model.addAttribute("page",page);
         return "account-index";
     }
-    @GetMapping("/account")
-    public String getAllAccount(Model model, Pageable pageable) {
-        String page = "admin-product";
+
+    @GetMapping("/accounts")
+    public String getAllAccounts(Model model, Pageable pageable) {
         Page<Account> accountPage = accountRepository.findAll(pageable);
         List<Account> accounts = accountPage.toList();
 
@@ -40,33 +41,34 @@ public class AccountController {
             accountDTO.setId(obj.getId());
             accountDTO.setFullName(obj.getFullName());
             accountDTO.setAddress(obj.getAddress());
-
-            if (obj.getDepartment() !=null ){
+            if (obj.getDepartment() != null) {
                 accountDTO.setDepartment(obj.getDepartment().getDepartmentName());
             }
             accountDTOS.add(accountDTO);
-            System.out.println(accountDTOS);
         }
+
+        int totalPage = accountPage.getTotalPages(); // Ensure totalPage is initialized
 
         model.addAttribute("accounts", accountDTOS);
-        model.addAttribute("totalPage",accountPage.getTotalPages());
-        model.addAttribute("currentPage",pageable.getPageNumber());
-        model.addAttribute("page",page);
-        System.out.println(pageable.getPageNumber());
+        model.addAttribute("totalPage", totalPage);
+        model.addAttribute("currentPage", pageable.getPageNumber());
 
-        return "admin-index";
+        return "account-index";
     }
 
-    @GetMapping("delete/{id}")
-    public String delete(@PathVariable Integer id) {
-        Optional<Account> opAccount = accountRepository.findById(id);
-        if (opAccount.isEmpty()) {
-            System.out.println("Not found Account with id = " + id);
-        }
-        accountRepository.deleteById(id);
-        return "redirect:/account";
+
+    @GetMapping("/accounts/new")
+    public String showCreateForm(Model model) {
+        Account account = new Account();
+        model.addAttribute("account", account);
+        model.addAttribute("departments", departmentRepository.findAll());
+        model.addAttribute("username", ""); // Thêm trường username vào model và gán giá trị mặc định là rỗng
+        model.addAttribute("password", ""); // Thêm trường password vào model và gán giá trị mặc định là rỗng
+        return "account-form";
     }
-    @GetMapping("/edit/{id}")
+
+
+    @GetMapping("/accounts/edit/{id}")
     public String showEditForm(@PathVariable("id") int id, Model model) {
         Optional<Account> account = accountRepository.findById(id);
         if (account.isPresent()) {
@@ -77,21 +79,22 @@ public class AccountController {
             return "redirect:/accounts";
         }
     }
-    @GetMapping("delete/product/{id}")
-    public String deleteProduct(@PathVariable Integer id) {
+
+    @GetMapping("/accounts/delete/{id}")
+    public String deleteAccount(@PathVariable Integer id) {
         Optional<Account> optionalAccount = accountRepository.findById(id);
-        if (optionalAccount.isEmpty()) {
+        if (optionalAccount.isPresent()) {
+            accountRepository.deleteById(id);
+        } else {
             System.out.println("Not found account with id = " + id);
         }
-        accountRepository.deleteById(id);
-        return "redirect:/admin/product";
+        return "redirect:/accounts";
     }
 
-    @PostMapping
+    @PostMapping("/accounts")
     public String saveAccount(@ModelAttribute("account") Account account) {
         accountRepository.save(account);
         return "redirect:/accounts";
     }
-
 
 }

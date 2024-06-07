@@ -1,57 +1,77 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-
-    <link th:rel="stylesheet" th:href="@{/webjars/bootstrap/4.0.0-2/css/bootstrap.min.css} "/>
-    <link th:rel="stylesheet" th:href="@{/webjars/font-awesome/5.15.4/css/all.css} "/>
-    <script th:src="@{/webjars/jquery/3.0.0/jquery.min.js}"></script>
-
+    <title>Account List</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+        th {
+            background-color: #f2f2f2;
+            text-align: left;
+        }
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+        .pagination {
+            display: inline-block;
+            margin-top: 20px;
+        }
+        .pagination a {
+            color: black;
+            float: left;
+            padding: 8px 16px;
+            text-decoration: none;
+            transition: background-color .3s;
+        }
+        .pagination a.active {
+            background-color: #4CAF50;
+            color: white;
+        }
+        .pagination a:hover:not(.active) {
+            background-color: #ddd;
+        }
+    </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-sm">
-        <!-- Brand -->
-        <a class="navbar-brand" href="#">Logo</a>
+<h1>Account List</h1>
+<a th:href="@{/accounts/new}">Create New Account</a>
+<table>
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Full Name</th>
+        <th>Address</th>
+        <th>Department</th>
+        <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="account : ${accounts}">
+        <td th:text="${account.id}"></td>
+        <td th:text="${account.fullName}"></td>
+        <td th:text="${account.address}"></td>
+        <td th:text="${account.department}"></td>
+        <td>
+            <a th:href="@{/accounts/edit/{id}(id=${account.id})}">Edit</a>
+            <a th:href="@{/accounts/delete/{id}(id=${account.id})}">Delete</a>
+        </td>
+    </tr>
+    </tbody>
+</table>
 
-        <!-- Links -->
-        <ul class="navbar-nav">
-            <li class="nav-item">
-                <a class="nav-link" href="/admin/">Trang Chủ</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/admin/account">account</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/admin/category">Danh Sách Sản Phẩm</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/admin/product">Sản Phẩm</a>
-            </li>
-        </ul>
-    </nav>
-    <div th:if="${page=='admin-index'}">
-        <h4>Trang Chủ</h4>
-    </div>
-
-    <div th:if="${page=='account-list'}">
-        <div th:replace="account-list.html::AccountList"></div>
-    </div>
-
-    <div th:if="${page=='admin-category'}">
-        <div th:replace="admin-category.html::AdminCategory"></div>
-    </div>
-
-    <div th:if="${page=='admin-product'}">
-        <div th:replace="~{admin-product.html::AdminProduct}"></div>
-    </div>
-
-    <div th:if="${page=='admin-product-add'}">
-        <div th:replace="~{admin-product-add::AdminProductAdd}"></div>
-    </div>
-
-    <div th:if="${page=='admin-product-edit'}">
-        <div th:replace="~{admin-product-edit::AdminProductEdit}"></div>
-    </div>
+<!--<div class="pagination">-->
+<!--    <a th:href="@{/accounts(page=${currentPage - 1})}" th:if="${currentPage > 0}">&laquo;</a>-->
+<!--    <a th:each="i : ${#numbers.sequence(0, totalPage - 1)}"-->
+<!--       th:href="@{/accounts(page=${i})}"-->
+<!--       th:text="${i + 1}"-->
+<!--       th:classappend="${i == currentPage} ? 'active'"></a>-->
+<!--    <a th:href="@{/accounts(page=${currentPage + 1})}" th:if="${currentPage < totalPage - 1}">&raquo;</a>-->
+<!--</div>-->
 </body>
 </html>

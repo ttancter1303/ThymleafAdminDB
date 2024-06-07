@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Department List</title>
+</head>
+<body>
+<h1>Department List</h1>
+<a th:href="@{/departments/new}">Create New Department</a>
+<table>
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Department Name</th>
+        <th>Number of People</th>
+        <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="department : ${departments}">
+        <td th:text="${department.id}">ID</td>
+        <td th:text="${department.departmentName}">Department Name</td>
+        <td th:text="${department.numPeople}">Number of People</td>
+        <td>
+            <a th:href="@{/departments/edit/{id}(id=${department.id})}">Edit</a>
+            <a th:href="@{/departments/delete/{id}(id=${department.id})}">Delete</a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<!--<div>-->
+<!--    <span th:text="'Page ' + (${currentPage != null ? currentPage + 1 : 0}) + ' of ' + (${totalPage != null ? totalPage : 0})"></span>-->
+<!--    <a th:if="${currentPage != null and currentPage > 0}" th:href="@{/departments(page=${currentPage - 1})}">Previous</a>-->
+<!--    <a th:if="${currentPage != null and totalPage != null and currentPage < totalPage - 1}" th:href="@{/departments(page=${currentPage + 1})}">Next</a>-->
+<!--</div>-->
+</body>
+</html>
